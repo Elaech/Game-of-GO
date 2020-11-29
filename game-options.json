@@ -1,3 +1,13 @@
 {
-
+  "name": "Game of GO",
+  "board-size": 9,
+  "checker-pixel-size": 80,
+  "score-pixel-size": 80,
+  "text-font": "Arial",
+  "line-thickness" : 2,
+  "player": "human",
+  "player-colors": [[0,0,0],[255,255,255]],
+  "invalid-color" : [255, 0, 0],
+  "background-color" : [233, 166, 99],
+  "line-color": [0,0,0]
 }
