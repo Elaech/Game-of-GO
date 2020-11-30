@@ -7,7 +7,7 @@ player1_score = None
 player2_score = None
 player1_ko = None
 player2_ko = None
-
+error_message = None
 
 def get_scores():
     return player1_score, player2_score
@@ -46,8 +46,13 @@ def is_legal_move(x, y):
     return table[x][y] == -1
 
 
-def move(x, y):
-    pass
+def show_table():
+    for line in table:
+        print(line)
+
+
+def move(board_x, board_y):
+    table[board_x][board_y] = turn
 
 
 def change_turn():

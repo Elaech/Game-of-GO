@@ -37,13 +37,26 @@ def mouse_board_hover():
     if graphics.mouse_on_board(mouse_x, mouse_y):
         board_x, board_y = graphics.get_board_position(mouse_x, mouse_y)
         if logic.is_legal_move(board_x, board_y):
-            graphics.draw_mouse_hover(logic.get_turn(), mouse_x, mouse_y)
+            graphics.draw_mouse_hover(logic.get_turn(), board_x, board_y)
         else:
             graphics.delete_last_hover()
+    else:
+        graphics.delete_last_hover()
 
 
 def make_move():
-    pass
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    graphics.delete_last_hover()
+    if graphics.mouse_on_board(mouse_x, mouse_y):
+        board_x, board_y = graphics.get_board_position(mouse_x, mouse_y)
+        if logic.is_legal_move(board_x, board_y):
+            logic.move(board_x,board_y)
+            graphics.draw_stone(logic.get_turn(),board_x,board_y)
+            logic.change_turn()
+            if logic.get_turn() == 1:
+                graphics.draw_message("Player2 moved",error=True)
+            else:
+                graphics.draw_message("Player1 moved", error=False)
 
 
 def start_game(opponent):
@@ -62,7 +75,6 @@ def start_game(opponent):
                 gaming = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 make_move()
-                logic.change_turn()
         if opponent == "computer" and first_player != logic.get_turn():
             print("computer move")
             logic.change_turn()
