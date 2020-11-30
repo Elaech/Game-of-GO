@@ -1,8 +1,8 @@
 {
   "name": "Game of GO",
   "board-size": 9,
-  "checker-pixel-size": 60,
-  "score-pixel-size": 60,
+  "checker-pixel-size": 80,
+  "score-pixel-size": 80,
   "text-font": "Arial",
   "line-thickness" : 2,
   "player": "human",

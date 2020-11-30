@@ -125,7 +125,8 @@ def draw_scores(player1_score, player2_score):
 def draw_message(message, error=False):
     pygame.draw.rect(game_screen,
                      background_color,
-                     [score_pixel_size * 5 + score_padding * 4, board_pixel_size + score_padding,board_pixel_size,board_pixel_size+score_pixel_size])
+                     [score_pixel_size * 5 + score_padding * 4, board_pixel_size + score_padding, board_pixel_size,
+                      board_pixel_size + score_pixel_size])
     if error:
         font.render_to(game_screen,
                        (score_pixel_size * 5 + score_padding * 4, board_pixel_size + score_padding),
@@ -136,6 +137,7 @@ def draw_message(message, error=False):
                        (score_pixel_size * 5 + score_padding * 4, board_pixel_size + score_padding),
                        message,
                        valid_color)
+    pygame.display.update()
 
 
 def draw_stone(turn, board_x, board_y):
