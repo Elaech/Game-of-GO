@@ -42,8 +42,8 @@ def initialise_game(options):
         table.append(line)
 
 
-def legal_move(x, y):
-    pass
+def is_legal_move(x, y):
+    return table[x][y] == -1
 
 
 def move(x, y):
@@ -51,4 +51,12 @@ def move(x, y):
 
 
 def change_turn():
-    pass
+    global turn
+    if turn == player1_checker:
+        turn = player2_checker
+    else:
+        turn = player1_checker
+
+
+def get_turn():
+    return turn

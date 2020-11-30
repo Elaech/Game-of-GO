@@ -3,8 +3,10 @@ import game_graphics as graphics
 import game_ai as AI
 import json
 import pygame
+import sys
 
 options = None
+first_player = None
 
 
 def init_game():
@@ -16,6 +18,8 @@ def init_game():
         Draws Initial Board
         Draws Initial Scores
     """
+    global options
+    global first_player
     with open("game-options.json") as input:
         options = json.load(input)
     logic.initialise_game(options)
@@ -25,22 +29,46 @@ def init_game():
     graphics.draw_initial_board()
     scores = logic.get_scores()
     graphics.draw_scores(scores[0], scores[1])
+    first_player = logic.get_turn()
 
 
-def start_game():
+def mouse_board_hover():
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    if graphics.mouse_on_board(mouse_x, mouse_y):
+        board_x, board_y = graphics.get_board_position(mouse_x, mouse_y)
+        if logic.is_legal_move(board_x, board_y):
+            graphics.draw_mouse_hover(logic.get_turn(), mouse_x, mouse_y)
+        else:
+            graphics.delete_last_hover()
+
+
+def make_move():
+    pass
+
+
+def start_game(opponent):
     """
     Game loop and events
     This is the game loop in which the controller takes action input from the user
     Depending on the action of the user, the controller orders the other modules to change the environment
     """
+    clock = pygame.time.Clock()
     gaming = True
     while gaming:
+        clock.tick(60)
+        mouse_board_hover()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 gaming = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                make_move()
+                logic.change_turn()
+        if opponent == "computer" and first_player != logic.get_turn():
+            print("computer move")
+            logic.change_turn()
     pygame.quit()
 
 
 if __name__ == '__main__':
     init_game()
-    start_game()
+    start_game(sys.argv[1])
