@@ -147,15 +147,20 @@ def draw_stone(turn, board_x, board_y):
     pygame.display.update()
 
 
+def delete_stone(board_x, board_y):
+    pixel_x,pixel_y = get_pixel_pos_from_board_pos(board_x,board_y)
+    draw_empty_pixel_pos(pixel_x,pixel_y)
+
+
 def draw_empty_pixel_pos(x_pixel, y_pixel):
     pygame.draw.circle(game_screen,
                        background_color,
                        [x_pixel, y_pixel],
-                       checker_hover_pixel_radius)
-    north = max(y_pixel - checker_hover_pixel_radius, checker_pixel_size)
-    south = min(y_pixel + checker_hover_pixel_radius, board_pixel_size - checker_pixel_size)
-    east = max(x_pixel - checker_hover_pixel_radius, checker_pixel_size)
-    west = min(x_pixel + checker_hover_pixel_radius, board_pixel_size - checker_pixel_size)
+                       checker_pixel_radius)
+    north = max(y_pixel - checker_pixel_radius, checker_pixel_size)
+    south = min(y_pixel + checker_pixel_radius, board_pixel_size - checker_pixel_size)
+    east = max(x_pixel - checker_pixel_radius, checker_pixel_size)
+    west = min(x_pixel + checker_pixel_radius, board_pixel_size - checker_pixel_size)
     pygame.draw.line(game_screen,
                      line_color,
                      [x_pixel, south],

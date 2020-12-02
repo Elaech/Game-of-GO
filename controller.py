@@ -45,18 +45,33 @@ def mouse_board_hover():
         graphics.delete_last_hover()
 
 
+def update_board(board_changes, ko_add, ko_remove):
+    for change in board_changes:
+        graphics.delete_stone(change[0], change[1])
+    if ko_add:
+        graphics.draw_ko_block(logic.get_other_turn(),ko_add[0],ko_add[1])
+    if ko_remove:
+        graphics.delete_stone(ko_remove[0],ko_remove[1])
+
+def score_update():
+    player1_score, player2_score = logic.get_scores()
+    graphics.draw_scores(player1_score, player2_score)
+    if logic.get_turn() == logic.get_player_checker(1):
+        graphics.draw_message("Player1 moved", error=False)
+    else:
+        graphics.draw_message("Player2 moved", error=True)
+
+
 def make_move():
     mouse_x, mouse_y = pygame.mouse.get_pos()
     graphics.delete_last_hover()
     if graphics.mouse_on_board(mouse_x, mouse_y):
         board_x, board_y = graphics.get_board_position(mouse_x, mouse_y)
         if logic.is_legal_move(board_x, board_y):
-            logic.move(board_x, board_y)
+            board_changes, ko_add, ko_remove = logic.move(board_x, board_y)
+            update_board(board_changes, ko_add, ko_remove)
             graphics.draw_stone(logic.get_turn(), board_x, board_y)
-            if logic.get_turn() == logic.get_player_checker(1):
-                graphics.draw_message("Player1 moved", error=False)
-            else:
-                graphics.draw_message("Player2 moved", error=True)
+            score_update()
             logic.change_turn()
 
 
