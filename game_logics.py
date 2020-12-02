@@ -173,11 +173,6 @@ def is_legal_move(board_x, board_y):
            and not ko
 
 
-def show_table():
-    for line in table:
-        print(line)
-
-
 def game_is_finished():
     if passes[0] and passes[1]:
         return True
@@ -310,3 +305,6 @@ def get_other_turn():
 def get_player_checker(player_nr):
     checkers = [None, player1_checker, player2_checker]
     return checkers[player_nr]
+
+def get_board_size():
+    return board_size

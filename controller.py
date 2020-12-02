@@ -1,6 +1,6 @@
 import game_logics as logic
 import game_graphics as graphics
-import game_ai as AI
+import game_ai as ai
 import json
 import pygame
 import sys
@@ -49,9 +49,10 @@ def update_board(board_changes, ko_add, ko_remove):
     for change in board_changes:
         graphics.delete_stone(change[0], change[1])
     if ko_add:
-        graphics.draw_ko_block(logic.get_other_turn(),ko_add[0],ko_add[1])
+        graphics.draw_ko_block(logic.get_other_turn(), ko_add[0], ko_add[1])
     if ko_remove:
-        graphics.delete_stone(ko_remove[0],ko_remove[1])
+        graphics.delete_stone(ko_remove[0], ko_remove[1])
+
 
 def score_update():
     player1_score, player2_score = logic.get_scores()
@@ -62,17 +63,21 @@ def score_update():
         graphics.draw_message("Player2 moved", error=True)
 
 
-def make_move():
+def make_move(board_x, board_y):
+    board_changes, ko_add, ko_remove = logic.move(board_x, board_y)
+    update_board(board_changes, ko_add, ko_remove)
+    graphics.draw_stone(logic.get_turn(), board_x, board_y)
+    score_update()
+    logic.change_turn()
+
+
+def human_make_move():
     mouse_x, mouse_y = pygame.mouse.get_pos()
     graphics.delete_last_hover()
     if graphics.mouse_on_board(mouse_x, mouse_y):
         board_x, board_y = graphics.get_board_position(mouse_x, mouse_y)
         if logic.is_legal_move(board_x, board_y):
-            board_changes, ko_add, ko_remove = logic.move(board_x, board_y)
-            update_board(board_changes, ko_add, ko_remove)
-            graphics.draw_stone(logic.get_turn(), board_x, board_y)
-            score_update()
-            logic.change_turn()
+            make_move(board_x, board_y)
 
 
 def winning():
@@ -118,13 +123,16 @@ def start_game(opponent):
             if event.type == pygame.QUIT:
                 gaming = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                make_move()
+                human_make_move()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
                     passing()
-        if opponent == "computer" and first_player != logic.get_turn():
-            print("computer move")
-            logic.change_turn()
+        if opponent == "computer" and logic.get_player_checker(1) != logic.get_turn():
+            if logic.game_is_finished():
+                winning()
+                break
+            move = ai.play_turn()
+            make_move(move[0], move[1])
     pygame.quit()
 
 
