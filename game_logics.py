@@ -1,3 +1,8 @@
+"""
+
+"""
+
+
 table = None
 turn = None
 empty_checker = None
@@ -5,7 +10,6 @@ player1_checker = None
 player2_checker = None
 scores = None
 kos = None
-error_message = None
 neighbours = [[1, 0], [-1, 0], [0, 1], [0, -1]]
 board_size = None
 passes = None
