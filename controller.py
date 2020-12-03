@@ -7,13 +7,15 @@ import sys
 import time
 
 """
-This is the main module of the project that connects the game logic and game graphics components with the user input
+This is the main module of the project Game-of-GO that connects the game logic and game graphics components with the user input
 It contains methods that :
     -take the input from the user and decide what to do with it based on the environment
     -utilise the game_logics and game_graphics to modify the environment
     -map user input to logical input
     -define the main game loop
 """
+
+# Variables that are used globally by this module
 options = None  # contains the input dictionary of the game-options
 first_player = None  # stores first player
 
@@ -39,7 +41,8 @@ def init_game():
     graphics.initialise_game(options)
     graphics.draw_initial_board()
     player1_score, player2_score = logic.get_scores()
-    graphics.draw_scores(player1_score, player2_score)
+    graphics.draw_scores(player1_score,
+                         player2_score)
     first_player = logic.get_turn()
 
 
@@ -54,9 +57,12 @@ def mouse_board_hover():
     """
     mouse_x, mouse_y = pygame.mouse.get_pos()
     if graphics.mouse_on_board(mouse_x, mouse_y):
-        board_x, board_y = graphics.get_board_position(mouse_x, mouse_y)
+        board_x, board_y = graphics.get_board_pos_from_pixel_pos(mouse_x,
+                                                                 mouse_y)
         if logic.is_legal_move(board_x, board_y):
-            graphics.draw_mouse_hover(logic.get_turn(), board_x, board_y)
+            graphics.draw_mouse_hover(logic.get_turn(),
+                                      board_x,
+                                      board_y)
         else:
             graphics.delete_last_hover()
     else:
@@ -73,11 +79,15 @@ def update_board(board_removals, ko_add, ko_remove):
     :return: None
     """
     for change in board_removals:
-        graphics.delete_stone(change[0], change[1])
+        graphics.delete_stone(change[0],
+                              change[1])
     if ko_add:
-        graphics.draw_ko_block(logic.get_other_turn(), ko_add[0], ko_add[1])
+        graphics.draw_ko_block(logic.get_other_turn(),
+                               ko_add[0],
+                               ko_add[1])
     if ko_remove:
-        graphics.delete_stone(ko_remove[0], ko_remove[1])
+        graphics.delete_stone(ko_remove[0],
+                              ko_remove[1])
 
 
 def score_update():
@@ -87,11 +97,14 @@ def score_update():
     :return: None
     """
     player1_score, player2_score = logic.get_scores()
-    graphics.draw_scores(player1_score, player2_score)
+    graphics.draw_scores(player1_score,
+                         player2_score)
     if logic.get_turn() == logic.get_player_checker(1):
-        graphics.draw_message("Player1 moved", error=False)
+        graphics.draw_message("Player1 moved",
+                              error=False)
     else:
-        graphics.draw_message("Player2 moved", error=True)
+        graphics.draw_message("Player2 moved",
+                              error=True)
 
 
 def make_move(board_x, board_y):
@@ -103,10 +116,15 @@ def make_move(board_x, board_y):
     :param board_y: y coordinate of the move on the board
     :return: None
     """
-    board_changes, ko_add, ko_remove = logic.move(board_x, board_y)
-    update_board(board_changes, ko_add, ko_remove)
+    board_changes, ko_add, ko_remove = logic.move(board_x,
+                                                  board_y)
+    update_board(board_changes,
+                 ko_add,
+                 ko_remove)
     graphics.delete_last_hover()
-    graphics.draw_stone(logic.get_turn(), board_x, board_y)
+    graphics.draw_stone(logic.get_turn(),
+                        board_x,
+                        board_y)
     score_update()
     logic.change_turn()
 
@@ -121,7 +139,8 @@ def human_make_move():
     """
     mouse_x, mouse_y = pygame.mouse.get_pos()
     if graphics.mouse_on_board(mouse_x, mouse_y):
-        board_x, board_y = graphics.get_board_position(mouse_x, mouse_y)
+        board_x, board_y = graphics.get_board_pos_from_pixel_pos(mouse_x,
+                                                                 mouse_y)
         if logic.is_legal_move(board_x, board_y):
             make_move(board_x, board_y)
 
@@ -199,7 +218,8 @@ def start_game(opponent):
                 break
             # Gets the move from the AI and commits it
             move = ai.play_turn()
-            make_move(move[0], move[1])
+            make_move(move[0],
+                      move[1])
     pygame.quit()
 
 
